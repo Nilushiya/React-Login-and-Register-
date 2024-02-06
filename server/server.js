@@ -11,19 +11,20 @@ app.use(cors());
 app.use(express.json(cookieParser));
 
 const db = mysql.createConnection({
-    host: "localhost",
     user: "root",
+    host: "localhost",
     password: "",
     database : "loginregister"
 })
 app.post('/register',(req,res) =>{
-    const sql = "insert into register (`name`,`email`,`pasword`) values (?)";
+    const sql = "INSERT INTO register (name,email,password) VALUES (?,?,?)";
+
     const values = [
-        req.body.name,
+        req.body.username,
         req.body.email,
         req.body.password,
     ]
-    db.query(sql,[values],(err , data) => {
+    db.query(sql,values,(err , data) => {
         if(err){
             return res.json("Error");
         }
