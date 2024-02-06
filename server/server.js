@@ -16,7 +16,35 @@ const db = mysql.createConnection({
     password: "",
     database : "loginregister"
 })
-
+app.post('/register',(req,res) =>{
+    const sql = "insert into register (`name`,`email`,`pasword`) values (?)";
+    const values = [
+        req.body.name,
+        req.body.email,
+        req.body.password,
+    ]
+    db.query(sql,[values],(err , data) => {
+        if(err){
+            return res.json("Error");
+        }
+        return res.json(data);
+    })
+})
+app.post('/login',(req,res) => {
+    const sql = "select * from register where email =? and password =?";
+    // console.log(req)
+    db.query(sql,[req.body.email,req.body.password],(err , data) => {
+        if(err){
+            return res.json("Error");
+        }
+        if(data.length > 0){
+            return res.json("Success");
+        }
+        else{
+            return res.json("Faile");
+        }
+    })
+})
 app.listen(8080,() =>{
     console.log("Runing.....");
 })
